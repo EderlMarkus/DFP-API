@@ -1,4 +1,12 @@
 <?php
+
+/**
+The Original-Code is from:
+https://github.com/googleads/googleads-php-lib/blob/master/examples/Dfp/v201805/LineItemService/GetAllLineItems.php
+
+I've altered a few things to just get Line-Items that ended yesterday, my changes are marked by beginning with "ME:"
+
+*/
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -26,7 +34,7 @@ use DateTime;
 use DateTimeZone;
 use Google\AdsApi\Dfp\Util\v201805\DfpDateTimes;
 
-/*delete old data*/
+/*ME: delete old data*/
 $myfile = './ids.txt';
 $current = "";
 file_put_contents($myfile, $current);
@@ -62,7 +70,7 @@ class GetAllLineItems
                 $i = $page->getStartIndex();
                 foreach ($page->getResults() as $lineItem) {
 
-				// Check if LineItem is set to unlimited EndDate, if not, get EndDate
+				//ME:  Check if LineItem is set to unlimited EndDate, if not, get EndDate
 					if (!$lineItem->getunlimitedEndDateTime()){
 						$liyear = $lineItem->getendDateTime()->getDate()->getYear();
 						$limonth = $lineItem->getendDateTime()->getDate()->getMonth();
@@ -76,26 +84,26 @@ class GetAllLineItems
 						$lidate = false;
 					}
 					
-				// Get current Date
+				//ME:  Get current Date
 					$year = date("Y");
 					$month = date("m");
 					$day = date("d");
 
-					// If End-Date of Line-Item is Yesterday
+					//ME:  If End-Date of Line-Item is Yesterday
 						if ($liyear == $year && $limonth == $month && $liday == ($day-1)){
 							printf(
 								"Line item with ID ".$lineItem->getId()." and day ".$lidate." was found. Currentyear is ".$month."\n",
 								$i++
 							);
-							//Add IDs
+							//ME: Add IDs
 							$file = './ids.txt';
-							// Open the file to get existing content
+							//ME:  Open the file to get existing content
 							$current = file_get_contents($file);
-							// Append a new person to the file
+							//ME:  Append a new person to the file
 							$current .= $lineItem->getId()."\n";
-							//Write the contents back to the file
+							//ME: Write the contents back to the file
 							file_put_contents($file, $current);
-							// END
+							//ME:  END
 						}
                 }
             }
